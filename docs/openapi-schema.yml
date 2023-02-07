@@ -1,0 +1,263 @@
+openapi: '3.0.2'
+info:
+  title: Tentant Portal
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+
+components:
+  schemas:
+    GeneralError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+    Index:
+      type: object
+      properties:
+        name:
+          type: string
+    Document:
+      type: object
+      additionalProperties:
+        type: string
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+  parameters:
+    skipParam:
+      name: skip
+      in: query
+      description: number of items to skip
+      required: true
+      schema:
+        type: integer
+        format: int32
+    limitParam:
+      name: limit
+      in: query
+      description: max records to return
+      required: true
+      schema:
+        type: integer
+        format: int32
+  responses:
+    NotFound:
+      description: Entity not found.
+    IllegalInput:
+      description: Illegal input for operation.
+    GeneralError:
+      description: General Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GeneralError'
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+    infra_orchestrator_auth:
+      type: oauth2
+      flows: 
+        implicit:
+          authorizationUrl: http://example.org/api/oauth/dialog
+          scopes:
+            write:opensearch_instance: create OpenSearch instance
+            write:opensearch_index: create OpenSearch Index
+            write:s3_bucket: create S3 bucket
+
+paths:
+  /users:
+    get:
+      tags:
+        - User Management
+      responses:
+        '200':
+          description: OK
+    post:
+      tags:
+        - User Management
+      requestBody:
+        # description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: OK
+  /users/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: User identifier
+    get:
+      tags:
+        - User Management
+      responses:
+        '200':
+          description: OK
+    put:
+      tags:
+        - User Management
+      requestBody:
+        # description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: OK
+    delete:
+      tags:
+        - User Management
+      responses:
+        '200':
+          description: OK
+
+  /indices:
+    get:
+      tags:
+        - Index Management
+      responses:
+        '200':
+          description: OK
+    post:
+      tags:
+        - Index Management
+      requestBody:
+        # description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Index'
+      responses:
+        '201':
+          description: OK
+  /indices/{name}:
+    parameters:
+      - in: path
+        name: name
+        schema:
+          type: string
+        required: true
+        description: Index identifier
+    get:
+      tags:
+        - Index Management
+      responses:
+        '200':
+          description: OK
+    put:
+      tags:
+        - Index Management
+      requestBody:
+        # description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Index'
+      responses:
+        '201':
+          description: OK
+    delete:
+      tags:
+        - Index Management
+      responses:
+        '200':
+          description: OK
+
+  /indices/{name}/documents:
+    parameters:
+      - in: path
+        name: name
+        schema:
+          type: string
+        required: true
+        description: Index identifier
+    get:
+      tags:
+        - Data Management
+      responses:
+        '200':
+          description: OK
+    post:
+      tags:
+        - Data Management
+      requestBody:
+        # description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Document'
+      responses:
+        '201':
+          description: OK
+  /indices/{name}/documents/{id}:
+    parameters:
+      - in: path
+        name: name
+        schema:
+          type: string
+        required: true
+        description: Index identifier
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: Document identifier
+    get:
+      tags:
+        - Data Management
+      responses:
+        '200':
+          description: OK
+    put:
+      tags:
+        - Data Management
+      requestBody:
+        # description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Document'
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+        - Data Management
+      responses:
+        '200':
+          description: OK

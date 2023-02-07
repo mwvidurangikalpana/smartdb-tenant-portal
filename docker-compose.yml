@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  user-management-frontend:
+    image: user-management-frontend:latest
+    container_name: user-management-frontend
+    build: .
+    ports:
+      - '3000:3000'
