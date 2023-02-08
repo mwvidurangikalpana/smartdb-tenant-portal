@@ -19,7 +19,7 @@ const ListIndices = () => {
       })
       let resJson = await res.json()
       if (res.status === 200) {
-        React.useEffect(() => {
+        useEffect(() => {
           // Fetch the list of users from the API and store it in the state
         }, [])
         setMessage('All users listed successfully')
