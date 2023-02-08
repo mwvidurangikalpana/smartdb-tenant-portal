@@ -40,7 +40,7 @@ const ListIndices = () => {
 
       <main>
         <div>
-          <h1 id="title">All Indices</h1>
+          <h1 id="title">Odasara All Indices</h1>
         </div>
         <div>
           <h2></h2>
